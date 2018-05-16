@@ -1,0 +1,32 @@
+{
+  "name": "gulp-my-cli",
+  "version": "1.0.5",
+  "description": "gulp-my-cli",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiemingzhang/gulp-my.git"
+  },
+  "keywords": [
+    "gulp"
+  ],
+  "author": {
+    "name": "xiemingzhang",
+    "email": "xiemingzhang.ok@163.com"
+  },
+  "bin": {
+    "gulp-my": "./index.js"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xiemingzhang/gulp-my/issues"
+  },
+  "homepage": "https://github.com/xiemingzhang/gulp-my#readme",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "minimist": "^1.2.0"
+  }
+}
