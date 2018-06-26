@@ -33,16 +33,40 @@ gulp.task('jscompress', ['bable2es5'], () => {
         .pipe(gulp.dest(function(file) { return file.base; }));
 })
 
-gulp.task('publish', ['clean', 'copy', 'bable2es5', 'jscompress', 'copy2'], () => {
-    return gulp.src(['build/**/src/*.js', 'build/**/src/common/*.js'])
-        .pipe(uglify())
-        .pipe(gulp.dest(function(file) { return file.base; }));
-})
-
 gulp.task('copy2', ['jscompress'], () => {
     var dir = fs.readdirSync('build/')
     dir.map(function(dir) {
         gulp.src('build/' + dir + '/**')
             .pipe(gulp.dest('publish'))
     })
+});
+
+gulp.task('publish', ['copy2'], () => {
+    return gulp.src(['build/**/src/*.js', 'build/**/src/common/*.js'])
+        .pipe(uglify())
+        .pipe(gulp.dest(function(file) { return file.base; }));
+})
+
+gulp.task('clean3', () => {
+    return gulp.src(['my'])
+        .pipe(clean());
+});
+
+gulp.task('copy3', ['clean3'], () => {
+    var dir = fs.readdirSync('proj/')
+    dir.map(function(dir) {
+        if(dir !== '.git'){
+           gulp.src('proj/' + dir + '/**')
+            .pipe(gulp.dest('my')) 
+        }  
+    })
+});
+
+gulp.task('getMy', ['copy3'], () => {//bable2es5
+    return gulp.src(['my/**/src/*.js', 'my/**/src/common/*.js'])
+        .pipe(babel({
+            presets: ['es2015'],
+            plugins: ["babel-plugin-transform-remove-strict-mode"]
+        }))
+        .pipe(gulp.dest(function(file) { return file.base; }));
 });
