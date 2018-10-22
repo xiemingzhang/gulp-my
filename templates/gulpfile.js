@@ -48,25 +48,52 @@ gulp.task('publish', ['copy2'], () => {
 })
 
 gulp.task('clean3', () => {
-    return gulp.src(['my'])
+    return gulp.src(['myRelease'])
         .pipe(clean());
 });
 
+// gulp.task('copy3', ['clean3'], () => {
+//     var dir = fs.readdirSync('proj/')
+//     dir.map(function(dir) {
+//         if(dir !== '.git'){
+//            gulp.src('proj/' + dir + '/**')
+//             .pipe(gulp.dest('my')) 
+//         }  
+//     })
+// });
 gulp.task('copy3', ['clean3'], () => {
-    var dir = fs.readdirSync('proj/')
+    var dir = fs.readdirSync('games/')
     dir.map(function(dir) {
         if(dir !== '.git'){
-           gulp.src('proj/' + dir + '/**')
-            .pipe(gulp.dest('my')) 
+           gulp.src('games/' + dir + '/**')
+            .pipe(gulp.dest('myRelease')) 
         }  
     })
 });
 
+// gulp.task('getMy', ['copy3'], () => {//bable2es5
+//     return gulp.src(['my/**/src/*.js', 'my/**/src/common/*.js'])
+//         .pipe(babel({
+//             presets: ['es2015'],
+//             plugins: ["babel-plugin-transform-remove-strict-mode"]
+//         }))
+//         .pipe(gulp.dest(function(file) { return file.base; }));
+// });
+// 
 gulp.task('getMy', ['copy3'], () => {//bable2es5
-    return gulp.src(['my/**/src/*.js', 'my/**/src/common/*.js'])
+    return gulp.src(['myRelease/**/src/*.js', 'myRelease/**/src/common/*.js'])
         .pipe(babel({
             presets: ['es2015'],
             plugins: ["babel-plugin-transform-remove-strict-mode"]
         }))
         .pipe(gulp.dest(function(file) { return file.base; }));
 });
+
+// gulp.task('bable2es55', () => {
+//     return gulp.src(['proj/index.js'])
+//         .pipe(babel({
+//             presets: ['es2015'],
+//             plugins: ["babel-plugin-transform-remove-strict-mode"]
+//         }))
+//         .pipe(gulp.dest(function(file) { return file.base; }));
+// });
