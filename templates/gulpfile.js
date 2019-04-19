@@ -1,37 +1,44 @@
 const gulp = require('gulp');
 const fs = require('fs');
+const path = require('path');
 const babel = require('gulp-babel');
 const clean = require('gulp-clean');
+
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const sourceMap = require('gulp-sourcemaps');
+
+
 const imagemin = require('gulp-imagemin');           //压缩图片1
 const tinypng = require('gulp-tinypng-compress');     //压缩图片2 需要有KEY,获取KEY值https://tinypng.com/dashboard/api
 const tinypng_nokey = require('gulp-tinypng-nokey');    //压缩图片3 免费
 const runSequence = require('run-sequence');
 
-gulp.task('default', ['jscompress'], () => {
-    console.log("完成")
-});
+const glob = require('glob');
+const es = require('event-stream');
 
-gulp.task('bable2es5', () => {
-    return gulp.src(['myRelease/**/src/*.js', 'myRelease/**/src/common/*.js'])
-        .pipe(babel({
-            presets: ['es2015'],
-            plugins: ["babel-plugin-transform-remove-strict-mode"]
-        }))
-        .pipe(gulp.dest(function(file) { return file.base; }));
-});
+// gulp.task('default', ['jscompress'], () => {
+//     console.log("完成")
+// });
 
-gulp.task('jscompress', ['bable2es5'], () => {
-    return gulp.src(['myRelease/**/src/*.js', 'myRelease/**/src/common/*.js'])
-        .pipe(uglify({
-            mangle: true,//类型：Boolean 默认：true 是否修改变量名
-            compress: true,//类型：Boolean 默认：true 是否完全压缩
-            preserveComments: "license" //保留所有注释
-        }))
-        .pipe(gulp.dest(function(file) { return file.base; }));
-})
+// gulp.task('bable2es5', () => {
+//     return gulp.src(['myRelease/**/src/*.js', 'myRelease/**/src/common/*.js'])
+//         .pipe(babel({
+//             presets: ['es2015'],
+//             plugins: ["babel-plugin-transform-remove-strict-mode"]
+//         }))
+//         .pipe(gulp.dest(function(file) { return file.base; }));
+// });
+
+// gulp.task('jscompress', ['bable2es5'], () => {
+//     return gulp.src(['myRelease/**/src/*.js', 'myRelease/**/src/common/*.js'])
+//         .pipe(uglify({
+//             mangle: true,//类型：Boolean 默认：true 是否修改变量名
+//             compress: true,//类型：Boolean 默认：true 是否完全压缩
+//             preserveComments: "license" //保留所有注释
+//         }))
+//         .pipe(gulp.dest(function(file) { return file.base; }));
+// })
 
 // ///////////////////////
 
@@ -41,29 +48,86 @@ gulp.task('clean3', () => {
 });
 
 gulp.task('copy3', ['clean3'], () => {
-    var pathArr = fs.readdirSync('games/')
+    // var pathArr = fs.readdirSync('games/')
     // pathArr.map(function(dir) {
     //     if(dir !== '.git'){
     //        gulp.src('games/' + dir + '/**')
     //         .pipe(gulp.dest('myRelease')) 
     //     }  
     // })
-    pathArr = pathArr.map(function(item){
-        if(dir !== '.git'){
-            return 'games/' + dir + '/**'
-        } 
-    })
-    return gulp.src(pathArr)
-            .pipe(gulp.dest('myRelease')) 
+    // pathArr = pathArr.filter(function(item){
+    //     if(item !== '.git' && item !== '.DS_Store'){
+    //         return true
+    //     } 
+    // })
+    // pathArr = pathArr.map(function(item){
+    //     return 'games/' + item + '/**'
+    // })
+    return gulp.src('games/**')
+            .pipe(gulp.dest('myRelease/')) 
 });
 
-gulp.task('getMy', ['copy3'], () => {//bable2es5
-    return gulp.src(['myRelease/**/src/*.js', 'myRelease/**/src/common/*.js'])
+gulp.task('bable2es5', ['copy3'], () => {
+    return gulp.src(['myRelease/**/app.js', 'myRelease/**/src/*.js', 'myRelease/**/src/common/*.js'])
         .pipe(babel({
             presets: ['es2015'],
             plugins: ["babel-plugin-transform-remove-strict-mode"]
         }))
         .pipe(gulp.dest(function(file) { return file.base; }));
+});
+
+// gulp.task('jscompress', ['bable2es5'], () => {
+//     return gulp.src(['myRelease/**/src/*.js', 'myRelease/**/src/common/*.js'])
+//         .pipe(uglify({
+//             mangle: true,//类型：Boolean 默认：true 是否修改变量名
+//             compress: true//类型：Boolean 默认：true 是否完全压缩
+//             // preserveComments: "license" //保留版权注释
+//         }))
+//         .pipe(gulp.dest(function(file) { return file.base; }));
+// })
+
+gulp.task('jscompress', ['bable2es5'], () => {
+    var pathArr = fs.readdirSync('myRelease/')
+    pathArr = pathArr.filter(function(item){
+        if(item !== '.git' && item !== '.DS_Store'){
+            return true
+        } 
+    })
+    pathArr = pathArr.map(function(item){
+        return 'myRelease/' + item
+    })
+    //
+    pathArr.forEach(function(item){
+        var project = JSON.parse(fs.readFileSync(path.join(item,'project.json'), 'utf8'));
+        var jsList = project.jsList
+        jsList = jsList.map(function(i){
+            return item + '/' + i
+        })
+
+        gulp.src(jsList, {base: item})
+        .pipe(sourceMap.init())
+        .pipe(concat('layer.min.js'))
+        .pipe(uglify({
+            mangle: true,//类型：Boolean 默认：true 是否修改变量名
+            compress: true//类型：Boolean 默认：true 是否完全压缩
+            // preserveComments: "license" //保留版权注释
+        }))
+        .pipe( sourceMap.write('.',{addComment: false}) )
+        .pipe(gulp.dest(item + '/src'));
+
+        project.jsList = ['src/layer.min.js']
+        var str_project = JSON.stringify(project, null, '\t');
+        fs.writeFileSync(path.join(item,'project.json'), str_project, 'utf8', (err) => {
+            if (err) throw err;
+            console.log('done');
+        });
+    })
+
+    return true
+})
+
+gulp.task('getMy', ['jscompress'], () => {//bable2es5
+    console.log('完成。')
 });
 
 ////////////////////////////

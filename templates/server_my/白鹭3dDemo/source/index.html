@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Egret</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="full-screen" content="true" />
+	<meta name="screen-orientation" content="portrait" />
+	<meta name="x5-fullscreen" content="true" />
+	<meta name="360-fullscreen" content="true" />
+	<style>
+        html, body {
+            -ms-touch-action: none;
+            background: #888888;
+            padding: 0;
+            border: 0;
+            margin: 0;
+            height: 100%;
+        }
+    </style>
+
+<!--这个标签为不通过egret提供的第三方库的方式使用的 javascript 文件，请将这些文件放在libs下，但不要放在modules下面。-->
+<!--other_libs_files_start-->
+<!--other_libs_files_end-->
+
+<!--这个标签为通过egret提供的第三方库的方式生成的 javascript 文件。删除 modules_files 标签后，库文件加载列表将不会变化，请谨慎操作！-->
+<!--modules_files_start-->
+	<script egret="lib" src="libs/modules/egret/egret.js" src-release="libs/modules/egret/egret.min.js"></script>
+	<script egret="lib" src="libs/modules/egret/egret.web.js" src-release="libs/modules/egret/egret.web.min.js"></script>
+	<script egret="lib" src="bin/resourcemanager/resourcemanager.js" src-release="bin/resourcemanager/resourcemanager.min.js"></script>
+	<script egret="lib" src="TweenLite/TweenLite.js" src-release="TweenLite/TweenLite.min.js"></script>
+	<script egret="lib" src="libs/modules/egret3d/egret3d.js" src-release="libs/modules/egret3d/egret3d.min.js"></script>
+	<!--modules_files_end-->
+
+<!--这个标签会被替换为项目中所有的 javascript 文件。删除 game_files 标签后，项目文件加载列表将不会变化，请谨慎操作！-->
+<!--game_files_start-->
+	<script egret="game" src="bin-debug/scene/ActionTree/ActionNode.js"></script>
+	<script egret="game" src="bin-debug/scene/actor/Actor.js"></script>
+	<script egret="game" src="bin-debug/scene/logic/Logic.js"></script>
+	<script egret="game" src="bin-debug/scene/manager/SceneManager.js"></script>
+	<script egret="game" src="bin-debug/scene/ActionTree/ActionMoveTo.js"></script>
+	<script egret="game" src="bin-debug/Main.js"></script>
+	<script egret="game" src="bin-debug/scene/ActionTree/ActionParallel.js"></script>
+	<script egret="game" src="bin-debug/scene/ActionTree/ActionRepeat.js"></script>
+	<script egret="game" src="bin-debug/scene/ActionTree/ActionSequence.js"></script>
+	<script egret="game" src="bin-debug/scene/ActionTree/ActionAttackTo.js"></script>
+	<script egret="game" src="bin-debug/scene/actor/GameActor.js"></script>
+	<script egret="game" src="bin-debug/scene/actor/ribbon.js"></script>
+	<script egret="game" src="bin-debug/scene/GameMain.js"></script>
+	<script egret="game" src="bin-debug/scene/ActionTree/ActionDelay.js"></script>
+	<script egret="game" src="bin-debug/scene/logic/ProtagonistLogic.js"></script>
+	<script egret="game" src="bin-debug/scene/manager/AudioManager.js"></script>
+	<script egret="game" src="bin-debug/scene/manager/CameraManager.js"></script>
+	<script egret="game" src="bin-debug/scene/manager/EffectManager.js"></script>
+	<script egret="game" src="bin-debug/scene/manager/LogicManager.js"></script>
+	<script egret="game" src="bin-debug/scene/manager/PlayerManager.js"></script>
+	<script egret="game" src="bin-debug/scene/ActionTree/ActionAttackTarget.js"></script>
+	<script egret="game" src="bin-debug/scene/manager/TableManager.js"></script>
+	<script egret="game" src="bin-debug/scene/Scene.js"></script>
+	<script egret="game" src="bin-debug/scene/util/GrassSqueeze.js"></script>
+	<script egret="game" src="bin-debug/scene/util/JsonUtil.js"></script>
+	<script egret="game" src="bin-debug/scene/util/MathEx.js"></script>
+	<script egret="game" src="bin-debug/scene/util/NavGrid.js"></script>
+	<script egret="game" src="bin-debug/scene/util/TableItems.js"></script>
+	<script egret="game" src="bin-debug/scene/util/Vec2.js"></script>
+	<script egret="game" src="bin-debug/ui/BattlePage.js"></script>
+	<script egret="game" src="bin-debug/ui/components/Blood.js"></script>
+	<script egret="game" src="bin-debug/ui/components/HitContainer.js"></script>
+	<script egret="game" src="bin-debug/ui/components/ProcessBar.js"></script>
+	<script egret="game" src="bin-debug/ui/components/SkillBar.js"></script>
+	<script egret="game" src="bin-debug/ui/components/TimeKeeper.js"></script>
+	<script egret="game" src="bin-debug/ui/EndingPage.js"></script>
+	<script egret="game" src="bin-debug/ui/LoadingPage.js"></script>
+	<script egret="game" src="bin-debug/ui/LoginPage.js"></script>
+	<script egret="game" src="bin-debug/ui/RoomPage.js"></script>
+	<script egret="game" src="bin-debug/ui/UIManager.js"></script>
+	<!--game_files_end-->
+</head>
+
+<body>
+
+	<div style="margin: auto;width: 100%;height: 100%;" class="egret-player" data-entry-class="Main" data-orientation="auto" data-scale-mode="showAll" data-frame-rate="60"
+data-content-width="640" data-content-height="960" data-show-paint-rect="false" data-multi-fingered="2" data-show-fps="false"
+data-show-log="false" data-show-fps-style="x:0,y:0,size:12,textColor:0xffffff,bgAlpha:0.9">
+</div>
+<script>
+        /**
+         * {
+         * "renderMode":, //引擎渲染模式，"canvas" 或者 "webgl"
+         * "audioType": "" //使用的音频类型，0:默认，1:qq audio，2:web audio，3:audio
+         * "antialias": //WebGL模式下是否开启抗锯齿，true:开启，false:关闭，默认为false
+         * }
+         **/
+		egret.runEgret({ renderMode: "webgl", audioType: 0 });
+	</script>
+</body>
+
+</html>

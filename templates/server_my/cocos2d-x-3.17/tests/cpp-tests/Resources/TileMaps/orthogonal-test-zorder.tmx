@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="12" height="12" tilewidth="101" tileheight="81" infinite="0" nextobjectid="1">
+ <tileset firstgid="1" name="Untitled" tilewidth="101" tileheight="171" spacing="2" margin="2" tilecount="45" columns="9">
+  <image source="ortho-test1.png" width="1024" height="1024"/>
+ </tileset>
+ <layer name="grass" width="12" height="12">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE1NlYGBQHcWjmEwMAGJkjsBAAgAA
+  </data>
+ </layer>
+ <layer name="trees4" width="12" height="12" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE2NgGAXUAMJk6lMjEQ82AACuL5x3QAIAAA==
+  </data>
+ </layer>
+ <layer name="trees3" width="12" height="12" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE2NgGAVDCWiQiGkNAM4Ujb1AAgAA
+  </data>
+ </layer>
+ <layer name="trees2" width="12" height="12" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAE2NgGAXDGaiTiEkFAETLfj9AAgAA
+  </data>
+ </layer>
+</map>
