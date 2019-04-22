@@ -1,21 +1,24 @@
-const gulp = require('gulp');
 const fs = require('fs');
 const path = require('path');
-const babel = require('gulp-babel');
+
+const gulp = require('gulp');
 const clean = require('gulp-clean');
-
+const babel = require('gulp-babel');
 const concat = require('gulp-concat');
-const uglify = require('gulp-uglify');
 const sourceMap = require('gulp-sourcemaps');
-
+const uglify = require('gulp-uglify');
 
 const imagemin = require('gulp-imagemin');           //压缩图片1
 const tinypng = require('gulp-tinypng-compress');     //压缩图片2 需要有KEY,获取KEY值https://tinypng.com/dashboard/api
 const tinypng_nokey = require('gulp-tinypng-nokey');    //压缩图片3 免费
-const runSequence = require('run-sequence');
 
-const glob = require('glob');
-const es = require('event-stream');
+const runSequence = require('run-sequence'); 
+
+const browserify = require('browserify');
+const standalonify = require('standalonify');
+const source = require('vinyl-source-stream');
+const rename = require('gulp-rename');
+// const buffer = require('vinyl-buffer');
 
 // gulp.task('default', ['jscompress'], () => {
 //     console.log("完成")
@@ -112,11 +115,17 @@ gulp.task('jscompress', ['bable2es5'], () => {
             compress: true//类型：Boolean 默认：true 是否完全压缩
             // preserveComments: "license" //保留版权注释
         }))
-        .pipe( sourceMap.write('.',{addComment: false}) )
+        // .pipe( sourceMap.write('.',{addComment: false}) )
         .pipe(gulp.dest(item + '/src'));
 
-        project.jsList = ['src/layer.min.js']
         var str_project = JSON.stringify(project, null, '\t');
+        fs.writeFileSync(path.join(item,'__project.json'), str_project, 'utf8', (err) => {
+            if (err) throw err;
+            console.log('done');
+        });
+
+        project.jsList = ['src/layer.min.js']
+        str_project = JSON.stringify(project, null, '\t');
         fs.writeFileSync(path.join(item,'project.json'), str_project, 'utf8', (err) => {
             if (err) throw err;
             console.log('done');
@@ -126,7 +135,62 @@ gulp.task('jscompress', ['bable2es5'], () => {
     return true
 })
 
-gulp.task('getMy', ['jscompress'], () => {//bable2es5
+// gulp.task('gulpbrowserify', ['jscompress'], () => {
+//     var pathArr = fs.readdirSync('myRelease/')
+//     pathArr = pathArr.filter(function(item){
+//         if(item !== '.git' && item !== '.DS_Store'){
+//             return true
+//         } 
+//     })
+//     pathArr = pathArr.map(function(item){
+//         return 'myRelease/' + item
+//     })
+//     //
+//     pathArr.forEach(function(item){
+//         gulp.src(item + '/util.js')
+//             .pipe(rename('__util.js'))
+//             .pipe(gulp.dest(item));
+
+//         browserify({
+//           entries: item + '/util.require.js'  //指定打包入口文件
+//         })
+//         .plugin(standalonify, {  //使打包后的js文件符合UMD规范并指定外部依赖包
+//         name: 'util',
+//         deps: {
+//             // 'nornj': 'nj',
+//             // 'react': 'React',
+//             // 'react-dom': 'ReactDOM'
+//         }
+//         })
+//         .bundle()  //转换为gulp能识别的流
+//         .pipe(source("util.js"))
+//         // .pipe(babel({
+//         //     presets: ['es2015']
+//         // }))
+//         // .pipe(uglify({
+//         //     mangle: true,//类型：Boolean 默认：true 是否修改变量名
+//         //     compress: true//类型：Boolean 默认：true 是否完全压缩
+//         //     // preserveComments: "license" //保留版权注释
+//         // }))
+//         // // .pipe(buffer())  //将vinyl对象内容中的Stream转换为Buffer
+//         .pipe(gulp.dest(item));  //输出打包后的文件
+
+//         gulp.src(item + '/util.js')
+//         .pipe(sourceMap.init())
+//         .pipe(concat('util.min.js'))
+//         .pipe(uglify({
+//             mangle: true,//类型：Boolean 默认：true 是否修改变量名
+//             compress: true//类型：Boolean 默认：true 是否完全压缩
+//             // preserveComments: "license" //保留版权注释
+//         }))
+//         // .pipe( sourceMap.write('.',{addComment: false}) )
+//         .pipe(gulp.dest(item));
+//     })
+    
+//     return true
+// })
+
+gulp.task('getMy', ['jscompress'], () => {//util.js bable2es5 
     console.log('完成。')
 });
 
